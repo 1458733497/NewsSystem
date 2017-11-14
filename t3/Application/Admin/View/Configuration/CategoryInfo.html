@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>终端设备系统管理平台</title>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/easyui/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/easyui/themes/icon.css">
+    <script type="text/javascript" src="__PUBLIC__/easyui/jquery.min.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/easyui/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/easyui/locale/easyui-lang-zh_CN.js"></script>
+</head>
+<body id="bodys" class="easyui-layout" onLoad="onloadset();">
+<div region="north" style="padding:5px; font-size:12px; height:38px;">
+    <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onClick="addnew()">新增</a>
+    <a href="javascript:void(0)" id="e1" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true" onClick="edittxt()">编辑</a>
+    <a href="javascript:void(0)" class="easyui-linkbutton" style="display:none" data-options="iconCls:'icon-remove',plain:true" id="b2"  onClick="removetxt()">删除</a>
+    <div style="float:right;margin:4px 5px 0 0">
+        <input class="easyui-searchbox" data-options="prompt:'',menu:'#m111',searcher:doSearch" style="width:300px"></input>
+        <div id="m111"><div data-options="name:'name',iconCls:'icon-ok'">分类名称</div></div>
+    </div>
+</div>
+<div region="center"><div class="easyui-tabs" data-options="fit:true,border:false"><div title="分类信息管理">
+<table id="xingshi" class="easyui-datagrid" striped="true" fit="true" fitColumns="true" pagination="true" url="/Admin/Configuration/categoryList" >
+    <thead>
+        <tr>
+            <th field="ck" checkbox="true"></th>
+            <th field="cid" width="60" align="center">ID</th>
+            <th field="name" width="150" align="center">分类名称</th>
+            <th field="aliasname" width="150" align="center">分类别名</th>
+            <th field="contentsubject" width="100" align="center" formatter='formattercont'>所属内容科目</th>
+            <th field="inuse" width="100" align="center" formatter='formatterinuse'>是否可用</th>
+        </tr>
+    </thead>
+</table>
+</div></div></div>
+
+<div id="xs" class="easyui-dialog" style="width:500px; height:300px; padding:10px 20px;" data-options="modal:true,resizable:true,closed:true,buttons:'#xs-buttons',title:'新增消息形式'">
+    <form method="post" id="xsg" novalidate>
+        <table>
+                        <tr style="display:none;"><td>ID：</td><td><input type="text" name="xscid" id="xscid"   readonly="readonly"/></td></tr>
+            <tr><td>分类名称：</td><td><input type="text" name="xsname" id="xsname" class="easyui-validatebox" data-options="required:true,validType:['length[1,32]']"  /></td></tr>
+            <tr><td>分类别名：</td><td><input type="text" name="xsaliasname" id="xsaliasname" class="easyui-validatebox" data-options="validType:['length[0,128]']" /></td></tr>
+                        <tr><td>所属内容科目：</td>
+                            <td>
+                                <select class="easyui-combobox" name="xscontentsubject" id="xscontentsubject" data-options="editable:false,required:true,validType:['length[1,11]']">
+                                    <option value="1">视音频类</option>
+                                    <option value="2">电商类</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr><td>是否可用：</td>
+                            <td>
+                                <select class="easyui-combobox" name="xsinuse" id="xsinuse" data-options="editable:false,required:true,validType:['length[1,11]']">
+                                    <option value="0">可用</option>
+                                    <option value="1">不可用</option>
+                                </select>
+                            </td>
+                        </tr>
+                </table>
+    </form>
+    <div id="xs-buttons">
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-ok" onClick="savetxt()">确定</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onClick="javascript:$('#xs').dialog('close')">取消</a>
+    </div>
+</div>
+
+</body>
+</html>
+<script>
+function onloadset(){
+    $('#xingshi').datagrid({
+        onSelect: function(index,row){
+            checkButton();
+        },
+        onUnselect: function(index,row){
+            checkButton();
+        },
+        onCheck: function(index,row){
+            checkButton();
+        },
+        onUncheck: function(index,row){
+            checkButton();
+        },
+                onSelectAll: function(index,row){
+            checkButton();
+        },
+                onUnselectAll: function(index,row){
+            checkButton();
+        }
+
+    });
+    checkButton();
+}
+function checkButton(){
+    var cnt = getSelectCount();
+    $('#e1').linkbutton(1==cnt?'enable':'disable');
+    $('#b2').linkbutton(1<=cnt?'enable':'disable');
+    
+}
+function getSelectCount(){
+    var ret = 0;
+    var rows = $('#xingshi').datagrid('getSelections');
+    ret = rows.length;
+        return ret;
+}
+function formatterinuse(v)
+{
+    if(v== "0")
+    {
+        return '可用';
+    }
+    if(v== "1")
+    {
+        return '不可用';
+    }
+}
+function formattercont(c)
+{
+    if(c== "1")
+    {
+        return '视音频类';
+    }
+    if(c== "2")
+    {
+        return '电商类';
+    }
+}
+function doSearch(value,name){ 
+    if(name=='name'){                
+                $('#xingshi').datagrid('loadData',{page:1,rows:[]});
+        $('#xingshi').datagrid('reload',{name: value});    
+    }
+}
+function addnew(){
+    $('#xs').dialog('open');
+        $('#xsg').form('reset');
+        url='/Admin/Configuration/ajaxCategoryAdd'; 
+}
+
+// 点击确定保存信息
+function savetxt() {
+    $('#xsg').form('submit',{
+        url: url,
+        onSubmit: function(){
+            return $(this).form('validate');
+        },
+        success:function(result) {
+            var resultStr = eval(result);
+            $.messager.alert('提示', resultStr);
+            if (resultStr == '编辑成功' || resultStr == '添加成功' || resultStr == '添加失败' || resultStr == '编辑失败') {
+                $('#xingshi').datagrid('reload');
+                $('#xs').dialog('close');
+            }
+        }
+    });
+}
+
+// /编辑信息
+function edittxt() {
+    var row = $('#xingshi').datagrid('getSelected');
+    if(row){
+        $('#xs').dialog('open').dialog('setTitle','编辑信息');
+                $('#xscid').val(row.cid);
+        $('#xsname').val(row.name);
+        $('#xsaliasname').val(row.aliasname);
+                $('#xscontentsubject').combobox('setValue',row.contentsubject);
+                $('#xsinuse').combobox('setValue', row.inuse);
+        url = '/Admin/Configuration/ajaxCategoryEdit/';
+    }
+}
+
+
+function removetxt() {
+    var row = $('#xingshi').datagrid("getSelections"); //返回选中多行   
+    if (row.length == 0) {
+        alert("请至少选择一行数据!");
+        return false;
+    }
+    var cids = '';
+    for (var i = 0; i < row.length; i++) {
+        //获取自定义table 的中的checkbox值   
+        var cid = row[i].cid;  
+        cids += cid + ','; 
+    }
+    if (row) {
+        $.messager.confirm('Confirm', '确定要删除吗?',
+        function(r) {
+            if (r) {
+                $.post('/Admin/Configuration/ajaxCategoryDel', {
+                    "cid": cids
+                },
+                function(result) {
+                    if (result.success) {
+                        $('#xingshi').datagrid('reload'); // reload the user data
+                    } else {
+                        $.messager.show({ // show error message
+                            title: 'Error',
+                            msg: result.errorMsg
+                        });
+                    }
+                },
+                'json');
+            }
+        });
+    }
+}
+</script>
