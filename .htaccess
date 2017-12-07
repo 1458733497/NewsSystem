@@ -1,2 +1,2 @@
   RewriteEngine On
-  RewriteRule ^(.*)$ $1/t3 [QSA,PT,L]
+  RewriteRule ^(.*)$ $1/gym [QSA,PT,L]

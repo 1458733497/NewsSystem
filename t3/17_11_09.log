@@ -1,9 +1,0 @@
-[ 2017-11-09T15:17:07+08:00 ] 127.0.0.1 /t3/
-NOTIC: [8] Use of undefined constant CONTROLLER_NAME - assumed 'CONTROLLER_NAME' /Library/WebServer/Documents/t3/ThinkPHP/Library/Think/App.class.php 第 190 行.
-
-[ 2017-11-09T15:18:53+08:00 ] 127.0.0.1 /t3/
-INFO: [ app_init ] --START--
-INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000015s ]
-INFO: [ app_init ] --END-- [ RunTime:0.000334s ]
-NOTIC: [8] Use of undefined constant CONTROLLER_NAME - assumed 'CONTROLLER_NAME' /Library/WebServer/Documents/t3/ThinkPHP/Library/Think/App.class.php 第 25 行.
-
