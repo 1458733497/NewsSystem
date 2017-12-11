@@ -1,6 +1,7 @@
 <?php
+// 数据库配置项
 return array(
-    // DB配置项
+    // Mysql DB配置
     'DB_TYPE' => 'mysql',
     'DB_HOST' => 'localhost',
     'DB_USER' => 'root',
