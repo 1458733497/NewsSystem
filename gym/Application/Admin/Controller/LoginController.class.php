@@ -3,7 +3,8 @@ namespace Admin\Controller;
 use Think\Controller;
 
 /**
- * 用户登录控制器。
+ * 用户登录控制器，主要逻辑为限制非登录人员进入后台管理模块。
+ * @author 常明
  */
 class LoginController extends Controller {
 
@@ -18,7 +19,6 @@ class LoginController extends Controller {
     /**
      * check
      * 账号密码验证
-     * @author 常明
      * 
      * @access public 
      * @return string 向前端返回json格式的字符串
@@ -56,7 +56,6 @@ class LoginController extends Controller {
     /**
      * loginout
      * 退出登录处理
-     * @author 常明
      * 
      * @access public 
      * @return void

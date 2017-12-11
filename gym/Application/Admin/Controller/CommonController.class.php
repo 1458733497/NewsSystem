@@ -1,8 +1,9 @@
 <?php
 namespace Admin\Controller;
 use Think\Controller;
+
 /**
- * 后台管理模块公共控制器，主要逻辑为限制非登录人员进入管理模块。
+ * 后台管理模块公共控制器
  * @author 常明
  */
 class CommonController extends Controller {

@@ -1,11 +1,12 @@
 <?php
-/**
- * 后台Index相关
- */
 namespace Admin\Controller;
 use Think\Controller;
 use Think\Exception;
 
+/**
+ * 后台基本管理控制器
+ * @author 常明
+ */
 class AdminController extends CommonController {
 
     public function index() {
