@@ -1,14 +1,16 @@
 <?php
-
+/**
+ * 公共函数
+ * @author 常明
+ */
 
     /**
      * show
      * 将处理完毕的数据以json格式返回给前端
-     * @author 常明
      * 
      * @param int    $status   处理状态
      * @param string $message  说明文字 
-     * @param mixed  $data     返回前端的数据
+     * @param mixed  $data     将要处理的数据
      * @return void
      **/
     function show($status, $message, $data = array()) {
@@ -20,13 +22,21 @@
         exit(json_encode($reuslt));
     }
 
-
+    /**
+     * getMd5Password
+     * 用md5加密用户密码
+     * 
+     * @param string $password 明文密码
+     * @return string 加密后的字符串
+     **/
     function getMd5Password($password) {
         return md5($password . C('MD5_SUFFIX'));
     }
+
     function getMenuType($type) {
         return $type == 1 ? '后台菜单' : '前端导航';
     }
+
     function status($status) {
         if($status == 0) {
             $str = '关闭';
@@ -37,13 +47,23 @@
         }
         return $str;
     }
+    /**
+     * getAdminMenuUrl
+     * 获取后台菜单地址
+     * 
+     * @param array $nav 从数据库中取出的导航信息
+     * @return string 拼接后的字符串
+     **/
     function getAdminMenuUrl($nav) {
-        $url = '__ROOT__/admin.php?c='.$nav['c'].'&a='.$nav['a'];
-        if($nav['f']=='index') {
-            $url = '__ROOT__/admin.php?c='.$nav['c'];
+        // print_r($nav);
+        // 拼接方式为 模块名/控制器名/方法名;若方法为index则可省略
+        $url = __ROOT__ . '/' . ucfirst($nav['m']) . '/' . $nav['c'];
+        if ($nav['f'] != 'index') {
+            $url .= '/' . $nav['f'];
         }
         return $url;
     }
+
     function getActive($navc){
         $c = strtolower(CONTROLLER_NAME);
         if(strtolower($navc) == $c) {
