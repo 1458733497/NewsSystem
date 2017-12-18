@@ -1,6 +1,8 @@
 <?php
+  // 获取导航信息
   $navs = D("Menu")->getAdminMenus();
   $username = getLoginUsername();
+  // 对非管理员用户隐藏用户管理内容
   foreach($navs as $k=>$v) {
     if($v['c'] == 'admin' && $username != 'admin') {
       unset($navs[$k]);

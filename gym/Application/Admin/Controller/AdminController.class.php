@@ -16,10 +16,8 @@ class AdminController extends CommonController {
     }
 
     public function add() {
-
         // 保存数据
         if(IS_POST) {
-
             if(!isset($_POST['username']) || !$_POST['username']) {
                 return show(0, '用户名不能为空');
             }

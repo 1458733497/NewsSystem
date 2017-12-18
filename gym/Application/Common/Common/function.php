@@ -11,7 +11,7 @@
      * @param int    $status   处理状态
      * @param string $message  说明文字 
      * @param mixed  $data     将要处理的数据
-     * @return void
+     * @return string json格式化后的字符串
      **/
     function show($status, $message, $data = array()) {
         $reuslt = array(
@@ -33,10 +33,24 @@
         return md5($password . C('MD5_SUFFIX'));
     }
 
+    /**
+     * getMenuType
+     * 获取菜单中文名
+     * 
+     * @param int $type 菜单名对应数字
+     * @return string 中文菜单名
+     **/
     function getMenuType($type) {
         return $type == 1 ? '后台菜单' : '前端导航';
     }
 
+    /**
+     * status
+     * 获取状态中文名
+     * 
+     * @param int $status 状态对应数字
+     * @return string 中文状态名
+     **/
     function status($status) {
         if($status == 0) {
             $str = '关闭';
@@ -47,6 +61,7 @@
         }
         return $str;
     }
+
     /**
      * getAdminMenuUrl
      * 获取后台菜单地址
@@ -55,7 +70,6 @@
      * @return string 拼接后的字符串
      **/
     function getAdminMenuUrl($nav) {
-        // print_r($nav);
         // 拼接方式为 模块名/控制器名/方法名;若方法为index则可省略
         $url = __ROOT__ . '/' . ucfirst($nav['m']) . '/' . $nav['c'];
         if ($nav['f'] != 'index') {

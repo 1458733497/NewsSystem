@@ -6,7 +6,7 @@ use Think\Controller;
  * @author 常明
  */
 class IndexController extends CommonController {
-    
+
     public function index() {
         $news = D('News')->maxcount();
         $newscount = D('News')->getNewsCount(array('status'=>1));
