@@ -1,17 +1,13 @@
 <include file="Index/header" />
 <body>
 <div id="wrapper">
-
   <include file="Index/nav"/>
   <script src="__ROOT__/Public/js/kindeditor/kindeditor-all.js"></script>
   <div id="page-wrapper">
-
     <div class="container-fluid">
-
       <!-- Page Heading -->
       <div class="row">
         <div class="col-lg-12">
-
           <ol class="breadcrumb">
             <li>
               <i class="fa fa-dashboard"></i>  <a href="__ROOT__/admin.php?c=content">文章管理</a>
@@ -23,10 +19,8 @@
         </div>
       </div>
       <!-- /.row -->
-
       <div class="row">
         <div class="col-lg-6">
-
           <form class="form-horizontal" id="singcms-form">
             <div class="form-group">
               <label for="inputname" class="col-sm-2 control-label">标题:</label>
@@ -43,6 +37,7 @@
             <div class="form-group">
               <label for="inputname" class="col-sm-2 control-label">缩图:</label>
               <div class="col-sm-5">
+                <!-- 使用uploadify插件实现图片上传 -->
                 <input id="file_upload"  type="file" multiple="true" >
                 <img style="display: none" id="upload_org_code_img" src="" width="150" height="150">
                 <input id="file_upload_image" name="thumb" type="hidden" multiple="true" value="">
@@ -70,22 +65,20 @@
                 </select>
               </div>
             </div>
-
             <div class="form-group">
               <label for="inputname" class="col-sm-2 control-label">来源:</label>
               <div class="col-sm-5">
                 <select class="form-control" name="copyfrom">
                   <foreach name="copyfrom" item="cfrom">
-
                     <option value="{$key}">{$cfrom}</option>
                   </foreach>
                 </select>
               </div>
             </div>
-
             <div class="form-group">
               <label for="inputPassword3" class="col-sm-2 control-label">内容:</label>
               <div class="col-sm-5">
+                <!-- 使用kindeditor实现文字内容编辑 -->
                 <textarea class="input js-editor" id="editor_singcms" name="content" rows="20" ></textarea>
               </div>
             </div>
@@ -101,27 +94,19 @@
                 <input type="text" class="form-control" name="keywords" id="inputPassword3" placeholder="请填写关键词">
               </div>
             </div>
-
-
             <div class="form-group">
               <div class="col-sm-offset-2 col-sm-10">
                 <button type="button" class="btn btn-default" id="singcms-button-submit">提交</button>
               </div>
             </div>
           </form>
-
-
         </div>
-
       </div>
       <!-- /.row -->
-
     </div>
     <!-- /.container-fluid -->
-
   </div>
   <!-- /#page-wrapper -->
-
 </div>
 <script>
   var SCOPE = {
@@ -130,7 +115,6 @@
     'ajax_upload_image_url' : '__ROOT__/admin.php?c=image&a=ajaxuploadimage',
     'ajax_upload_swf' : '__ROOT__/Public/js/party/uploadify.swf',
   };
-
 </script>
 <!-- /#wrapper -->
 <script src="__ROOT__/Public/js/admin/image.js"></script>

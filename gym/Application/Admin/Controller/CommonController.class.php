@@ -52,6 +52,15 @@ class CommonController extends Controller {
         return false;
     }
 
+    /**
+     * setStatus
+     * 更新数据状态(逻辑删除)
+     * 
+     * @access public 
+     * @param array $data 要更新的状态
+     * @param int   $models 模型名
+     * @return int
+     **/
     public function setStatus($data, $models) {
         try {
             if ($_POST) {
@@ -73,6 +82,14 @@ class CommonController extends Controller {
         }
     }
 
+    /**
+     * listorder
+     * 排序操作，支持复数记录操作
+     * 
+     * @access public 
+     * @param int $model 模型名
+     * @return int
+     **/
     public function listorder($model='') {
         $listorder = $_POST['listorder'];
         $jumpUrl = $_SERVER['HTTP_REFERER'];
@@ -96,5 +113,4 @@ class CommonController extends Controller {
         }
         return show(0,'排序数据失败',array('jump_url' => $jumpUrl));
     }
-
 }

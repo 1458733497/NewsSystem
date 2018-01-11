@@ -53,17 +53,15 @@ function todelete(url, data) {
     ,"JSON");
 }
 
-// 修改状态操作
-$('.singcms-table #singcms-on-off').on('click', function(){
-
+// 点击状态按钮修改状态
+$('.singcms-table #singcms-on-off').on('click', function() {
+    // 获取id和当前状态
     var id = $(this).attr('attr-id');
     var status = $(this).attr("attr-status");
     var url = SCOPE.set_status_url;
-
     data = {};
     data['id'] = id;
     data['status'] = status;
-
     layer.open({
         type : 0,
         title : '是否提交？',
@@ -78,7 +76,6 @@ $('.singcms-table #singcms-on-off').on('click', function(){
         },
 
     });
-
 });
 
 // 排序操作
@@ -89,7 +86,7 @@ $('#button-listorder').click(function() {
        postData[this.name] = this.value;
     });
     var url = SCOPE.listorder_url;
-    $.post(url,postData,function(result){
+    $.post(url,postData,function(result) {
         if(result.status == 1) {
             //成功
             return dialog.success(result.message,result['data']['jump_url']);
@@ -101,13 +98,14 @@ $('#button-listorder').click(function() {
 });
 
 //提交表单操作
-$("#singcms-button-submit").click(function(){
+$("#singcms-button-submit").click(function() {
+    // 将表单对象转化为数组
     var data = $("#singcms-form").serializeArray();
+    // 数据规范化，用于post方式提交
     postData = {};
-    $(data).each(function(i){
+    $(data).each(function(i) {
        postData[this.name] = this.value;
     });
-    console.log(postData);
     // 将获取到的数据post给服务器
     url = SCOPE.save_url;
     jump_url = SCOPE.jump_url;
@@ -123,22 +121,24 @@ $("#singcms-button-submit").click(function(){
 });
 
 // 推送操作
-$("#singcms-push").click(function(){
+$("#singcms-push").click(function() {
+    // 获取推荐位id
     var id = $("#select-push").val();
     if(id==0) {
         return dialog.error("请选择推荐位");
     }
+    // 要推送的文章id列表
     push = {};
     postData = {};
+    // 获取选中的文章id
     $("input[name='pushcheck']:checked").each(function(i){
         push[i] = $(this).val();
     });
 
     postData['push'] = push;
     postData['position_id']  =  id;
-    //console.log(postData);return;
     var url = SCOPE.push_url;
-    $.post(url, postData, function(result){
+    $.post(url, postData, function(result) {
         if(result.status == 1) {
             // TODO
             return dialog.success(result.message,result['data']['jump_url']);
@@ -148,5 +148,4 @@ $("#singcms-push").click(function(){
             return dialog.error(result.message);
         }
     },"json");
-
 });

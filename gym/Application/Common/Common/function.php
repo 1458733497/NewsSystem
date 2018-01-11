@@ -23,6 +23,23 @@
     }
 
     /**
+     * showKind
+     * 将处理完毕的数据以json格式返回给前端(KindEditor专用)
+     * 
+     * @param int    $status   处理状态
+     * @param mixed  $data     将要处理的数据
+     * @return string json格式化后的字符串
+     **/
+    function showKind($status,$data) {
+        // 设定header
+        header('Content-type:application/json;charset=UTF-8');
+        if ($status == 0) {
+            exit(json_encode(array('error'=>0,'url'=>$data)));
+        }
+        exit(json_encode(array('error'=>1,'message'=>'上传失败')));
+    }
+
+    /**
      * getMd5Password
      * 用md5加密用户密码
      * 
@@ -31,6 +48,16 @@
      **/
     function getMd5Password($password) {
         return md5($password . C('MD5_SUFFIX'));
+    }
+
+    /**
+     * getLoginUsername
+     * 获取当前用户名，借此判断用户是否已登录
+     * 
+     * @return string
+     **/
+    function getLoginUsername() {
+        return $_SESSION['adminUser']['username'] ? $_SESSION['adminUser']['username']: '';
     }
 
     /**
@@ -78,6 +105,13 @@
         return $url;
     }
 
+    /**
+     * getAdminMenuUrl
+     * 获取当前正在访问的菜单，将其在导航标注以反映用户访问轨迹
+     * 
+     * @param int $navc 前端传入的控制器名
+     * @return string
+     **/
     function getActive($navc){
         $c = strtolower(CONTROLLER_NAME);
         if(strtolower($navc) == $c) {
@@ -85,72 +119,46 @@
         }
         return '';
     }
-    function showKind($status,$data) {
-        header('Content-type:application/json;charset=UTF-8');
-        if($status==0) {
-            exit(json_encode(array('error'=>0,'url'=>$data)));
-        }
-        exit(json_encode(array('error'=>1,'message'=>'上传失败')));
-    }
-    function getLoginUsername() {
-        return $_SESSION['adminUser']['username'] ? $_SESSION['adminUser']['username']: '';
-    }
+
+    /**
+     * getCatName
+     * 获取分类中文名
+     * 
+     * @param array $navs 导航信息
+     * @param int   $id 分类id
+     * @return mixed
+     **/
     function getCatName($navs, $id) {
         foreach($navs as $nav) {
             $navList[$nav['menu_id']] = $nav['name'];
         }
         return isset($navList[$id]) ? $navList[$id] : '';
     }
+
+    /**
+     * getCopyFromById
+     * 获取文章信息来源
+     * 
+     * @param int   $id 信息来源id
+     * @return mixed
+     **/
     function getCopyFromById($id) {
         $copyFrom = C("COPY_FROM");
         return $copyFrom[$id] ? $copyFrom[$id] : '';
     }
+
+    /**
+     * isThumb
+     * 根据缩略图标识，并返回对应html信息
+     * 
+     * @param int $thumb 缩略图标识
+     * @return string
+     **/
     function isThumb($thumb) {
         if($thumb) {
             return '<span style="color:red">有</span>';
         }
         return '无';
-    }
-
-    /**
-    +----------------------------------------------------------
-     * 字符串截取，支持中文和其他编码
-    +----------------------------------------------------------
-     * @static
-     * @access public
-    +----------------------------------------------------------
-     * @param string $str 需要转换的字符串
-     * @param string $start 开始位置
-     * @param string $length 截取长度
-     * @param string $charset 编码格式
-     * @param string $suffix 截断显示字符
-    +----------------------------------------------------------
-     * @return string
-    +----------------------------------------------------------
-     */
-    function msubstr($str, $start=0, $length, $charset="utf-8", $suffix=true)
-    {
-        $len = substr($str);
-        if(function_exists("mb_substr")){
-            if($suffix)
-                return mb_substr($str, $start, $length, $charset)."...";
-            else
-                return mb_substr($str, $start, $length, $charset);
-        }
-        elseif(function_exists('iconv_substr')) {
-            if($suffix && $len>$length)
-                return iconv_substr($str,$start,$length,$charset)."...";
-            else
-                return iconv_substr($str,$start,$length,$charset);
-        }
-        $re['utf-8']   = "/[\x01-\x7f]|[\xc2-\xdf][\x80-\xbf]|[\xe0-\xef][\x80-\xbf]{2}|[\xf0-\xff][\x80-\xbf]{3}/";
-        $re['gb2312'] = "/[\x01-\x7f]|[\xb0-\xf7][\xa0-\xfe]/";
-        $re['gbk']    = "/[\x01-\x7f]|[\x81-\xfe][\x40-\xfe]/";
-        $re['big5']   = "/[\x01-\x7f]|[\x81-\xfe]([\x40-\x7e]|\xa1-\xfe])/";
-        preg_match_all($re[$charset], $str, $match);
-        $slice = join("",array_slice($match[0], $start, $length));
-        if($suffix) return $slice."…";
-        return $slice;
     }
 
 

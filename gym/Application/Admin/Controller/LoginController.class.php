@@ -27,7 +27,6 @@ class LoginController extends Controller {
         // 获取前端页面传参
         $username = $_POST['username'];
         $password = $_POST['password'];
-
         // 非空判断
         if(!trim($username)) {
             return show(0,'用户名不能为空');

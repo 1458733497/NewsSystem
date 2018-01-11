@@ -1,17 +1,13 @@
 <include file="Index/header" />
 <body>
 <div id="wrapper">
-
   <include file="Index/nav"/>
   <script src="__ROOT__/Public/js/kindeditor/kindeditor-all.js"></script>
   <div id="page-wrapper">
-
     <div class="container-fluid">
-
       <!-- Page Heading -->
       <div class="row">
         <div class="col-lg-12">
-
           <ol class="breadcrumb">
             <li>
               <i class="fa fa-dashboard"></i>  <a href="__ROOT__/admin.php?c=content">文章管理</a>
@@ -23,10 +19,8 @@
         </div>
       </div>
       <!-- /.row -->
-
       <div class="row">
         <div class="col-lg-6">
-
           <form class="form-horizontal" id="singcms-form">
             <div class="form-group">
               <label for="inputname" class="col-sm-2 control-label">标题:</label>
@@ -43,8 +37,12 @@
             <div class="form-group">
               <label for="inputname" class="col-sm-2 control-label">缩图:</label>
               <div class="col-sm-5">
+                <!-- 使用uploadify插件实现图片上传 -->
                 <input id="file_upload"  type="file" multiple="true" >
+                <!-- 实际起作用的是上面这个语句，它会将此input转化成一个图片上传swf -->
+                <!-- 此句将缩略图实际显示出来（如果有的话） -->
                 <img style="display: none" id="upload_org_code_img" src="{$news.thumb}" width="150" height="150">
+                <!-- 隐藏表单项，用来提交thumb的地址，以使其作为表单的一项，一起提交至服务器 -->
                 <input id="file_upload_image" name="thumb" type="hidden" multiple="true" value="{$news.thumb}">
               </div>
             </div>
@@ -63,30 +61,27 @@
               <label for="inputname" class="col-sm-2 control-label">所属栏目:</label>
               <div class="col-sm-5">
                 <select class="form-control" name="catid">
-
                   <foreach name="webSiteMenu" item="sitenav">
                     <option value="{$sitenav.menu_id}" <if condition="$sitenav['menu_id'] eq $news['catid']">selected="selected"</if>>{$sitenav.name}</option>
                   </foreach>
                 </select>
               </div>
             </div>
-
             <div class="form-group">
               <label for="inputname" class="col-sm-2 control-label">来源:</label>
               <div class="col-sm-5">
                 <select class="form-control" name="copyfrom">
                   <foreach name="copyfrom" item="cfrom">
-
                     <option value="{$key}" <if condition="$key eq $news['copyfrom']">selected="selected"</if>>{$cfrom}</option>
                   </foreach>
                 </select>
               </div>
             </div>
-
             <div class="form-group">
               <label for="inputPassword3" class="col-sm-2 control-label">内容:</label>
               <div class="col-sm-5">
-                <textarea class="input js-editor" id="editor_singcms" name="content" rows="20" >{$news.content}</textarea>
+                <!-- 使用kindeditor实现文字内容编辑 -->
+                <textarea class="input js-editor" id="ke_editor" name="content" rows="20" >{$news.content}</textarea>
               </div>
             </div>
             <div class="form-group">
@@ -109,19 +104,13 @@
               </div>
             </div>
           </form>
-
-
         </div>
-
       </div>
       <!-- /.row -->
-
     </div>
     <!-- /.container-fluid -->
-
   </div>
   <!-- /#page-wrapper -->
-
 </div>
 <script>
   var SCOPE = {
@@ -130,22 +119,24 @@
     'ajax_upload_image_url' : '__ROOT__/admin.php?c=image&a=ajaxuploadimage',
     'ajax_upload_swf' : '__ROOT__/Public/js/party/uploadify.swf',
   };
-
 </script>
 <!-- /#wrapper -->
 <script src="__ROOT__/Public/js/admin/image.js"></script>
 <script>
-  // 6.2
+  // 使用kindeditor插件创建编辑器
   KindEditor.ready(function(K) {
-    window.editor = K.create('#editor_singcms',{
+    window.editor = K.create('#ke_editor',{
       uploadJson : '__ROOT__/admin.php?c=image&a=kindupload',
-      afterBlur : function(){this.sync();}, //
+      // 同步获取到的数据
+      afterBlur : function(){this.sync();},
     });
   });
 </script>
 <script>
+  // 如果有缩略图，显示图片
   var thumb = "{$news.thumb}";
   if(thumb) {
+    // show()的作用为去掉 display:none.
     $("#upload_org_code_img").show();
   }
 </script>

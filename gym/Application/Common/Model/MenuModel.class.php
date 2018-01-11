@@ -1,6 +1,7 @@
 <?php
 namespace Common\Model;
 use Think\Model;
+
 /**
  * 菜单表Menu模型
  * @author 常明
@@ -28,7 +29,15 @@ class MenuModel extends  Model {
         return $this->_db->add($data);
     }
 
-    public function find($id){
+    /**
+     * find
+     * 获取一条菜单数据
+     * 
+     * @access public 
+     * @param int  $id 菜单id
+     * @return array
+     **/
+    public function find($id) {
         if(!$id || !is_numeric($id)) {
             return array();
         }
@@ -125,7 +134,7 @@ class MenuModel extends  Model {
      * @param array  $data 查询条件
      * @return int
      **/
-    public function getMenusCount($data= array()) {
+    public function getMenusCount($data = array()) {
         // 计算被删除菜单
         // $data['status'] = array('neq',-1);
         return $this->_db->where($data)->count();
@@ -149,7 +158,7 @@ class MenuModel extends  Model {
 
     /**
      * getBarMenus
-     * 获取前端菜单列表
+     * 获取前端菜单(分类)列表
      * 
      * @access public 
      * @return array

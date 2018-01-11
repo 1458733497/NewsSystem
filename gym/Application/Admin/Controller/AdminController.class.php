@@ -4,17 +4,31 @@ use Think\Controller;
 use Think\Exception;
 
 /**
- * 后台基本管理控制器
+ * 后台管理控制器
  * @author 常明
  */
 class AdminController extends CommonController {
 
+    /**
+     * index
+     * 后台管理首页
+     * 
+     * @access public 
+     * @return void
+     **/
     public function index() {
         $admins = D('Admin')->getAdmins();
         $this->assign('admins', $admins);
         $this->display();
     }
 
+    /**
+     * add
+     * 新增用户
+     * 
+     * @access public 
+     * @return void
+     **/
     public function add() {
         // 保存数据
         if(IS_POST) {
@@ -30,7 +44,6 @@ class AdminController extends CommonController {
             if($admin && $admin['status']!=-1) {
                 return show(0,'该用户存在');
             }
-
             // 新增
             $id = D("Admin")->insert($_POST);
             if(!$id) {
@@ -41,6 +54,13 @@ class AdminController extends CommonController {
         $this->display();
     }
 
+    /**
+     * setStatus
+     * 变更用户状态
+     * 
+     * @access public 
+     * @return void
+     **/
     public function setStatus() {
         $data = array(
             'admin_id'=>intval($_POST['id']),
@@ -49,29 +69,43 @@ class AdminController extends CommonController {
         return parent::setStatus($_POST,'Admin');
     }
 
+    /**
+     * personal
+     * 个人中心页面
+     * 
+     * @access public 
+     * @return void
+     **/
     public function personal() {
+        // 获取登录用户session信息
         $res = $this->getLoginUser();
+        // 获取数据库用户信息
         $user = D("Admin")->getAdminByAdminId($res['admin_id']);
         $this->assign('vo',$user);
         $this->display();
     }
 
+    /**
+     * save
+     * 更改用户信息
+     * 
+     * @access public 
+     * @return void
+     **/
     public function save() {
         $user = $this->getLoginUser();
         if(!$user) {
             return show(0,'用户不存在');
         }
-
         $data['realname'] = $_POST['realname'];
         $data['email'] = $_POST['email'];
-
         try {
             $id = D("Admin")->updateByAdminId($user['admin_id'], $data);
             if($id === false) {
                 return show(0, '配置失败');
             }
             return show(1, '配置成功');
-        }catch(Exception $e) {
+        } catch (Exception $e) {
             return show(0, $e->getMessage());
         }
     }
